@@ -1,0 +1,111 @@
+package controllers
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/crypto/bcrypt"
+	model "main.go/Authentication/models"
+)
+
+
+var collection *mongo.Collection
+func Signup(w http.ResponseWriter, r *http.Request) {
+
+	// Log the incoming request
+	fmt.Println("Received signup request")
+	// Parse the form data
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Error parsing form data", http.StatusBadRequest)
+		return
+	}
+
+	fullname := r.FormValue("fullname")
+	email := r.FormValue("email")
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	country := r.FormValue("country")
+
+	//validation
+	if len(fullname) < 3 || len(email) < 5 || username == "" || len(password) < 5 || country == "" {
+		http.Error(w, "All fields are required", http.StatusBadRequest)
+		return
+	}
+
+	//check if username already exists
+	usernameFilter := bson.M{"username": username}
+	var existingUserbyUsername model.User
+	err = collection.FindOne(context.TODO(), usernameFilter).Decode(&existingUserbyUsername)
+	if err == nil {
+		http.Error(w, "Username already exists", http.StatusConflict)
+		return
+	}
+
+	//check if email already exists
+	emailFilter := bson.M{"email": email}
+	var existingUserbyEmail model.User
+	err = collection.FindOne(context.TODO(), emailFilter).Decode(&existingUserbyEmail)
+	if err == nil {
+		http.Error(w, "Email already exists", http.StatusConflict)
+		return
+	}
+
+	//check if password already exits
+
+	findOptions := options.Find()
+	cur, err := collection.Find(context.TODO(), bson.D{}, findOptions)
+	if err != nil {
+		http.Error(w, "Error fetching users", http.StatusInternalServerError)
+		return
+	}
+	defer cur.Close(context.TODO())
+
+	var users []model.User
+	if err = cur.All(context.TODO(), &users); err != nil {
+		http.Error(w, "Error fetching data", http.StatusInternalServerError)
+		return
+	}
+
+	// Iterate through all users and compare passwords
+	for _, user := range users {
+		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+		if err == nil {
+			http.Error(w, "Password already exists", http.StatusConflict)
+			return
+		}
+	}
+
+	//Hashing user password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	if err != nil {
+		http.Error(w, "Server Error during Hashing", http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("Fullname: %s, Email: %s, Username: %s, Country: %s\n", fullname, email, username, country)
+
+	//Creating user
+	user := model.User{
+		FullName: fullname,
+		Email:    email,
+		Username: username,
+		Password: string(hashedPassword),
+		Country:  country,
+	}
+
+	collection.InsertOne(context.Background(), user)
+	// Set response header to application/json
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	// Create a response map
+	response := map[string]string{"message": "User registered successfully"}
+
+	// Encode response map to JSON and send
+	json.NewEncoder(w).Encode(response)
+}
