@@ -3,5 +3,5 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Create server here...")
+	fmt.Println("Starting the backend...")
 }
