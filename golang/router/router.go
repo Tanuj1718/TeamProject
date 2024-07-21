@@ -1,7 +1,12 @@
 package router
 
-import "fmt"
+import (
+	"github.com/gorilla/mux"
+	"main.go/golang/controllers"
+)
 
-func router() {
-	fmt.Println("Have to create router")
+func Router() *mux.Router {
+	router := mux.NewRouter()
+	router.HandleFunc("/signup", controllers.Signup).Methods("POST")
+	return router
 }

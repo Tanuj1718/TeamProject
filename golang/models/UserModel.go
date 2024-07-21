@@ -4,8 +4,9 @@ type User struct{
 	Id string `bson:"_id,omitempty"`
 	FirstName string `bson:"firstname"`
 	LastName string `bson:"lastname"`
-	MobileNumber int `bson:"mobilenumber"`
+	MobileNumber string `bson:"mobilenumber"`
 	Email string `bson:"email"`
+	Password string `bson:"password"`
 	Address string `bson:"address"`
 	Location string `bson:"location"`
 	City string `bson:"city"`

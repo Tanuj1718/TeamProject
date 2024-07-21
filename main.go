@@ -3,5 +3,5 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Starting the backend...")
+	fmt.Println("Entering in folder structure...")
 }

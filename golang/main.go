@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	"main.go/golang/router"
+)
 
 func main() {
-	fmt.Println("Create server here...")
+	r := router.Router()
+
+	fmt.Println("Server is getting ready...")
+	log.Fatal(http.ListenAndServe(":8000", r))
 }
