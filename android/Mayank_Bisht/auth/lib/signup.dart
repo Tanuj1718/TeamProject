@@ -90,7 +90,7 @@ class _SignupState extends State<Signup> {
     final response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: jsonEncode(<String, String>{
         'firstName': firstName.text,
