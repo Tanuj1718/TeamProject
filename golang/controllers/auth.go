@@ -54,6 +54,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	// Log the incoming request
 	fmt.Println("Received signup request")
+
 	// Parse the form data
 	err := r.ParseForm()
 	if err != nil {

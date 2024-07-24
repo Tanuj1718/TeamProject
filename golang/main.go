@@ -22,5 +22,5 @@ func main() {
 		// Apply the CORS middleware to your router
 		router := corsOptions.Handler(r)
 		fmt.Println("Server is getting ready...")
-		log.Fatal(http.ListenAndServe(":8000", router))
+		log.Fatal(http.ListenAndServe("172.30.160.1:8000", router))
 }
