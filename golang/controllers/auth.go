@@ -53,8 +53,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	// Log the incoming request
-	fmt.Println("Received signup request")
-
+	fmt.Println("Received signup request<->")
 	// Parse the form data
 	err := r.ParseForm()
 	if err != nil {

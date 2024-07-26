@@ -50,6 +50,7 @@ class _SignupState extends State<Signup> {
     final url = 'http://192.168.3.48:8000/signup';
     final response = await http.post(
       Uri.parse(url),
+<<<<<<< HEAD
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: {
         'firstname': _firstNameController.text,
@@ -62,6 +63,10 @@ class _SignupState extends State<Signup> {
         'country': _countryController.text,
         'password': _passwordController.text,
         'location': "demo",
+=======
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+>>>>>>> 69d73adc7f76368bad29311317712bde702edf49
       },
     );
 
