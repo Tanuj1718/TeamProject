@@ -1,5 +1,6 @@
 import 'package:auth/forgot.dart';
 import 'package:auth/signup.dart';
+import 'package:auth/signupdemo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

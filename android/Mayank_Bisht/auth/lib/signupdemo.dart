@@ -1,19 +1,15 @@
 import 'dart:convert';
-
-import 'package:auth/homepage.dart';
+import 'package:auth/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-
-class Signup extends StatefulWidget {
-  const Signup({super.key});
-
+class SignupPage extends StatefulWidget {
   @override
-  State<Signup> createState() => _SignupState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _SignupState extends State<Signup> {
-
+class _SignupPageState extends State<SignupPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -61,7 +57,7 @@ class _SignupState extends State<Signup> {
         'state': _stateController.text,
         'country': _countryController.text,
         'password': _passwordController.text,
-        'location': "demo",
+        'location': "hi",
       },
     );
 
@@ -71,21 +67,8 @@ class _SignupState extends State<Signup> {
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
-      _emailController.clear();
-      _passwordController.clear();
-      _firstNameController.clear();
-      _lastNameController.clear();
-      _mobileController.clear();
-      _addressController.clear();
-      _cityController.clear();
-      _stateController.clear();
-      _countryController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(responseBody['Status'])),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Homepage()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
